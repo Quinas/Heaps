@@ -20,19 +20,28 @@ public class FibonacciHeap<S> implements IHeap<FibonacciHeap<S>, S> {
     } else if (tree2 == null) {
       trees.set(tree1.getDegree(), tree1);
     } else {
-      trees.set(tree1.getDegree(), null);
-      mergeTrees(trees, tree1.merge(tree2), trees.get(tree1.getDegree() + 1));
+      int d = tree1.getDegree();
+      trees.set(d, null);
+      mergeTrees(trees, tree1.merge(tree2), trees.get(d + 1));
     }
   }
 
   private void consolidate(
       List<FibonacciTree<PriorityWrapper<S>>> trees, FibonacciTree<PriorityWrapper<S>> root) {
     FibonacciTree<PriorityWrapper<S>> cur = root;
-    mergeTrees(trees, root, trees.get(root.getDegree()));
+    List<FibonacciTree<PriorityWrapper<S>>> list = new ArrayList<>();
+    list.add(root);
     cur = cur.getRight();
     while (cur != root) {
-      mergeTrees(trees, cur, trees.get(cur.getDegree()));
+      list.add(cur);
       cur = cur.getRight();
+    }
+    for (FibonacciTree<PriorityWrapper<S>> tree : list) {
+      tree.setLeft(tree);
+      tree.setRight(tree);
+    }
+    for (FibonacciTree<PriorityWrapper<S>> tree : list) {
+      mergeTrees(trees, tree, trees.get(tree.getDegree()));
     }
   }
 
@@ -83,18 +92,16 @@ public class FibonacciHeap<S> implements IHeap<FibonacciHeap<S>, S> {
     } else {
       FibonacciTree<PriorityWrapper<S>> l = maxTree.getLeft();
       FibonacciTree<PriorityWrapper<S>> r = maxTree.getRight();
-      FibonacciTree<PriorityWrapper<S>> child = maxTree.getChild(), cur = child;
-      r.setLeft(l);
-      l.setLeft(r);
+      FibonacciTree<PriorityWrapper<S>> child = maxTree.getChild();
+      if (l != maxTree) {
+        r.setLeft(l);
+        l.setRight(r);
 
-      if (cur != null) {
-        cur.setParent(null);
-        cur = cur.getRight();
-        while (cur != child) {
-          cur.setParent(null);
-          cur = cur.getRight();
+        if (child != null) {
+          l.union(child);
         }
-        l.union(child);
+      } else {
+        l = child;
       }
 
       ArrayList<FibonacciTree<PriorityWrapper<S>>> treesDegree = new ArrayList<>();

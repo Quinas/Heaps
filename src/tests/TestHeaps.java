@@ -1,6 +1,7 @@
 package tests;
 
 import binomial_heap.BinomialHeap;
+import fibonacci_heap.FibonacciHeap;
 import heap.IHeap;
 import heap_clasico.HeapClasico;
 import org.junit.Before;
@@ -32,7 +33,7 @@ public class TestHeaps {
     list = new ArrayList<>();
     register(new HeapClasico<>(), new HeapClasico<>());
     register(new BinomialHeap<>(), new BinomialHeap<>());
-    //    register(new FibonacciHeap<>(), new FibonacciHeap<>());
+    register(new FibonacciHeap<>(), new FibonacciHeap<>());
     for (IHeap<?, Integer> heap : heaps) {
       for (int i = 0; i < initialSize; ++i) {
         heap.insertar(i, i);

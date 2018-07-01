@@ -5,17 +5,16 @@ public class FibonacciTree<T extends Comparable<T>> {
   private FibonacciTree<T> left;
   private FibonacciTree<T> right;
   private FibonacciTree<T> child;
-  private FibonacciTree<T> parent;
-  private boolean marked;
   private int degree;
+  private int size;
   private T value;
 
   public FibonacciTree(T value) {
     this.value = value;
     left = this;
     right = this;
-    marked = false;
     degree = 0;
+    size = 1;
   }
 
   public FibonacciTree<T> getLeft() {
@@ -38,26 +37,6 @@ public class FibonacciTree<T extends Comparable<T>> {
     return child;
   }
 
-  public void setChild(FibonacciTree<T> child) {
-    this.child = child;
-  }
-
-  public FibonacciTree<T> getParent() {
-    return parent;
-  }
-
-  public void setParent(FibonacciTree<T> parent) {
-    this.parent = parent;
-  }
-
-  public boolean isMarked() {
-    return marked;
-  }
-
-  public void setMarked(boolean marked) {
-    this.marked = marked;
-  }
-
   public T getValue() {
     return value;
   }
@@ -76,7 +55,7 @@ public class FibonacciTree<T extends Comparable<T>> {
       tree.left = child;
       tree.right = r;
     }
-    tree.parent = this;
+    size += tree.size;
   }
 
   public void union(FibonacciTree<T> tree) {
@@ -95,6 +74,9 @@ public class FibonacciTree<T extends Comparable<T>> {
     if (tree == null) {
       return this;
     } else {
+      if (degree != tree.getDegree()) {
+        throw new AssertionError();
+      }
       if (value.compareTo(tree.getValue()) > 0) {
         addChild(tree);
         degree++;
@@ -105,5 +87,21 @@ public class FibonacciTree<T extends Comparable<T>> {
         return tree;
       }
     }
+  }
+
+  public int getSize() {
+    return size;
+  }
+
+  @Override
+  public String toString() {
+    String ans = "";
+    ans += value + " ";
+    FibonacciTree<T> cur = getRight();
+    while (cur != this) {
+      ans += cur.getValue() + " ";
+      cur = cur.getRight();
+    }
+    return ans;
   }
 }

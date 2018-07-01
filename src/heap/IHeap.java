@@ -1,13 +1,13 @@
 package heap;
 
 public interface IHeap<T extends IHeap<T, S>, S> {
-    void insertar(S x, int p);
+  void insertar(S x, int p);
 
-    S extraer_siguiente();
+  S extraer_siguiente();
 
-    T meld(T c);
+  T meld(T c);
 
-    S getTop();
+  S getTop();
 
-    int size();
+  int size();
 }

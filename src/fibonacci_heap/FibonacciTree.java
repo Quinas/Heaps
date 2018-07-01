@@ -92,16 +92,4 @@ public class FibonacciTree<T extends Comparable<T>> {
   public int getSize() {
     return size;
   }
-
-  @Override
-  public String toString() {
-    String ans = "";
-    ans += value + " ";
-    FibonacciTree<T> cur = getRight();
-    while (cur != this) {
-      ans += cur.getValue() + " ";
-      cur = cur.getRight();
-    }
-    return ans;
-  }
 }

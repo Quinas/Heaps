@@ -4,6 +4,7 @@ import heap.IHeap;
 import leftist_heap.LeftistHeap;
 import org.junit.Before;
 import org.junit.Test;
+import skew.SkewHeap;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +33,8 @@ public class TestHeaps {
     //    register(new HeapClasico<>(), new HeapClasico<>());
     //    register(new BinomialHeap<>(), new BinomialHeap<>());
     //    register(new FibonacciHeap<>(), new FibonacciHeap<>());
-    register(new LeftistHeap<>(), new LeftistHeap<>());
+    //    register(new LeftistHeap<>(), new LeftistHeap<>());
+    register(new SkewHeap<>(), new SkewHeap<>());
     for (IHeap<?, Integer> heap : heaps) {
       for (int i = 0; i < initialSize; ++i) {
         heap.insertar(i, i);

@@ -80,6 +80,11 @@ public class HeapClasico<S> implements IHeap<HeapClasico<S>, S> {
   }
 
   @Override
+  public String getName() {
+    return "Heap Clásico";
+  }
+
+  @Override
   public S getTop() {
     return heap.get(1).getValue();
   }

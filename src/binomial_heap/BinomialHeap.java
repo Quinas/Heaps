@@ -109,4 +109,9 @@ public class BinomialHeap<S> implements IHeap<BinomialHeap<S>, S> {
   public int size() {
     return size;
   }
+
+  @Override
+  public String getName() {
+    return "Binomial Heap";
+  }
 }

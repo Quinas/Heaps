@@ -28,7 +28,7 @@ public class LeftistTree<T extends Comparable<T>> {
       } else {
         if (max.leftChild.rank < max.rightChild.rank) {
           LeftistTree<T> t = max.leftChild;
-          max.leftChild = rightChild;
+          max.leftChild = max.rightChild;
           max.rightChild = t;
         }
         max.rank = max.rightChild.rank + 1;

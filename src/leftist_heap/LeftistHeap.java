@@ -47,4 +47,9 @@ public class LeftistHeap<S> implements IHeap<LeftistHeap<S>, S> {
   public int size() {
     return size;
   }
+
+  @Override
+  public String getName() {
+    return "Leftist Heap";
+  }
 }

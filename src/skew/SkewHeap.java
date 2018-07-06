@@ -75,4 +75,9 @@ public class SkewHeap<S> implements IHeap<SkewHeap<S>, S> {
     public int size() {
         return root != null ? root.size : 0;
     }
+
+    @Override
+    public String getName() {
+        return "Skew Heap";
+    }
 }

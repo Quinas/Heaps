@@ -18,6 +18,7 @@ public class PriorityWrapper<T> implements Comparable<PriorityWrapper<T>> {
   public T getValue() {
     return value;
   }
+  public int getPriority() { return priority; }
 
   @Override
   public String toString() {

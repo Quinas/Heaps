@@ -136,4 +136,9 @@ public class FibonacciHeap<S> implements IHeap<FibonacciHeap<S>, S> {
   public int size() {
     return size;
   }
+
+  @Override
+  public String getName() {
+    return "Fibonacci Heap";
+  }
 }

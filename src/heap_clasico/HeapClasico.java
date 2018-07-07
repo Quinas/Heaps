@@ -64,13 +64,14 @@ public class HeapClasico<S> implements IHeap<HeapClasico<S>, S> {
   @Override
   public HeapClasico<S> meld(HeapClasico<S> c) {
     HeapClasico<S> ans = new HeapClasico<>();
-    ans.heap = new ArrayList<>(heap);
+    List<PriorityWrapper<S>> list = new ArrayList<>();
+    for (int i = 1; i < heap.size(); ++i) {
+      list.add(heap.get(i));
+    }
     for (int i = 1; i < c.heap.size(); ++i) {
-      ans.heap.add(c.heap.get(i));
+      list.add(c.heap.get(i));
     }
-    for (int i = ans.heap.size() - 1; i > 0; i--) {
-      ans.siftDown(i);
-    }
+    ans.heapify(list);
     return ans;
   }
 
@@ -87,5 +88,15 @@ public class HeapClasico<S> implements IHeap<HeapClasico<S>, S> {
   @Override
   public S getTop() {
     return heap.get(1).getValue();
+  }
+
+  @Override
+  public void heapify(List<PriorityWrapper<S>> data) {
+    heap = new ArrayList<>();
+    heap.add(null);
+    heap.addAll(data);
+    for (int i = heap.size()-1; i > 0; --i) {
+      siftDown(i);
+    }
   }
 }

@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gráficos</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<script>
+  function meanStd(xs) {
+    var n = xs.length;
+
+    var mean = 0;
+    $.each(xs, function (i, x) {
+      mean += x;
+    });
+    mean /= xs.length;
+
+    var std = 0;
+    $.each(xs, function (i, x) {
+      std += (x - mean) * (x - mean);
+    });
+    std = Math.sqrt(std / n);
+
+    return {mean: mean, std: std};
+  }
+
+  function plot(data, layout) {
+    var div = $('<div>');
+    Plotly.newPlot(div[0], data, layout);
+    return div;
+  }
+
+  function plotByMeasure(app) {
+    var measureNames = [];
+    $.each(app[Object.keys(app)[0]][0], function (key, value) {
+      if (Array.isArray(value)) {
+        measureNames.push(key);
+      }
+    });
+
+    var xKey = app[Object.keys(app)[0]][0]['j'] != null ? 'j' : 'i';
+
+    return $('<div>').append(
+      $.map(measureNames, function (measureName) {
+        var isLog = true; //measureName !== 'Inserción';
+        
+        var data = $.map(app, function (experiments, implName) {
+          var yss = $.map(experiments, function (e) {
+            var ys = e[measureName];
+            return meanStd(ys);
+          });
+          
+          return {
+            x: $.map(experiments, function (e) {
+              return e[xKey];
+            }),
+            y: $.map(yss, function (ys) {
+              return ys.mean
+            }),
+            error_y: {
+              type: 'data',
+              array: $.map(yss, function (ys) {
+                return ys.std;
+              }),
+              visible: true
+            },
+            type: 'scatter',
+            name: implName
+          }
+        });
+
+        var layout = {
+          title: measureName,
+          xaxis: {
+            title: xKey
+          },
+          yaxis: {
+            title: 'Tiempo (segundos)',
+            type: isLog ? 'log' : undefined,
+            autorange: isLog ? true : undefined
+          }
+        };
+
+        return $('<div>').append(
+          $('<h3 class="section">').text(measureName),
+          plot(data, layout)
+        )
+      })
+    );
+  }
+
+  $.getJSON('experiments.json', function (json) {
+    $(function () {
+      $('body').append(
+        $.map(json, function (app, appName) {
+          return $('<div>').append(
+            $('<h2 class="section">').text(appName),
+            plotByMeasure(app)
+          );
+        })
+      );
+
+      var collapsedIcon = '▸ ', expandedIcon = '▾ ';
+      $('.section').each(function () {
+        var $title = $(this);
+        var $section = $title.next();
+
+        var $triangle = $('<span>');
+        $triangle.text(expandedIcon);
+        $triangle.on('click', function () {
+          var currentIcon = $triangle.text();
+          if (currentIcon === expandedIcon) {
+            $section.slideUp('fast', function () {
+              $triangle.text(collapsedIcon);
+            });
+          }
+          else {
+            $section.slideDown('fast', function () {
+              $triangle.text(expandedIcon);
+            });
+          }
+        });
+
+        $title.prepend($triangle);
+      });
+    });
+  });
+</script>
+</body>
+</html>
